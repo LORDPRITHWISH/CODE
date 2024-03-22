@@ -10,29 +10,32 @@ void swap(int *a,int *b)    {
 
 void check(int *arr,int len,int po){
     int lc=po*2+1,rc=(po+1)*2;
-    if(lc<len){
-        if(rc<len){
-            if(arr[po]<arr[lc]){
-                if(arr[rc]>arr[lc]){
-                    swap(arr+po,arr+rc);
-                    check(arr,len,rc);
-                }
-                else{
-                    swap(arr+po,arr+lc);
-                    check(arr,len,lc);
-                }
-            }
-            else if (arr[po]<arr[rc])
-            {
+    if (!(lc<len))
+    return;
+
+    if(rc<len){
+        if(arr[po]<arr[lc]){
+            if(arr[rc]>arr[lc]){
                 swap(arr+po,arr+rc);
                 check(arr,len,rc);
             }
-            
+            else{
+                swap(arr+po,arr+lc);
+                check(arr,len,lc);
+            }
         }
-        else if(arr[po]<arr[lc])
-            swap(arr+po,arr+lc);
+        else if (arr[po]<arr[rc])
+        {
+            swap(arr+po,arr+rc);
+            check(arr,len,rc);
+        }
+        
     }
+    else if(arr[po]<arr[lc])
+        swap(arr+po,arr+lc);
+    
 }
+
 
 void heapify(int *arr,int len){
     for(int i=len-1;i>=0;i--)
@@ -56,6 +59,7 @@ int main()  {
     int* arr=arrdec(len);
     priarr(arr,len);
     heap(arr,len);
+    printf("\n");
     priarr(arr,len);
     free(arr);
 }   
