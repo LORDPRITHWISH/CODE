@@ -11,25 +11,22 @@ unsigned int K[18];
 
 unsigned int tobi(std::string hex)
 {
-    int len = hex.length();
     unsigned int bin = 0;
-    for (int i = 0; i < len; i++)
+    for (char c : hex)
     {
         bin <<= 4;
-        bin |= HEXCHR.find(hex[i]);
+        bin |= HEXCHR.find(c);
     }
     return bin;
 }
 
 std::string tohex(unsigned int bin)
 {
-    unsigned int val = 15, ext;
     std::string hex = "";
     for (int i = 0; i < 8; i++)
     {
-        ext = bin & val;
+        hex = HEXCHR[bin & 0xf] + hex;
         bin >>= 4;
-        hex = HEXCHR[ext] + hex;
     }
 
     return hex;
@@ -46,12 +43,11 @@ void setS()
 
 void keyset(std::string key)
 {
-    int len = key.length();
-    if (len > 56)
+    if (key.length() > 56)
         key = key.substr(0, 56);
     const int ars = key.length() / 4;
-    unsigned int k[ars];
-    for (i = 0; i < ars; i++)
+    std::vector<unsigned int> k(ars);
+    for (int i = 0; i < ars; i++)
         for (int j = 0; j < 4; j++)
         {
             k[i] <<= 8;

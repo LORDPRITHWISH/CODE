@@ -56,22 +56,20 @@ void setS()
 void keyset(std::string key)
 {
     if (key.length() > 56)
-    {
         key = key.substr(0, 56);
-    }
-    int ars = key.length() / 4;
-    for (int i = 0; i < ars; ++i)
+    const int ars = key.length() / 4;
+    std::vector<unsigned int> k(ars);
+    for (int i = 0; i < ars; i++)
+        for (int j = 0; j < 4; j++)
+        {
+            k[i] <<= 8;
+            k[i] |= key[4 * i + j];
+        }
+    int j = 0;
+    for (int i = 0; i < 18; i++)
     {
-        unsigned int k = 0;
-        for (int j = 0; j < 4; ++j)
-        {
-            k <<= 8;
-            k |= key[4 * i + j];
-        }
-        for (int j = 0; j < 18; ++j)
-        {
-            K[j] ^= k;
-        }
+        K[i] ^= k[j++];
+        j %= ars;
     }
 }
 
@@ -186,9 +184,10 @@ int main()
     setS();
     std::string key = "darklord";
     keyset(key);
-    std::string message = "hello";
+    std::string message = "amigo how are you doing what is the mater with you";
     std::string cipher = encode(message);
     std::string result = decode(cipher);
+    // std::string result = decode("EC3215078B357125F2C69504698D00A952CF473810C6A2312C9256156A7A2F7E1947B606D0585696E43A2BA759BF7D38FC8D73758CAB80F0");
     std::cout << "Cipher: " << cipher << std::endl;
     std::cout << "Decoded: " << result << std::endl;
     return 0;
